@@ -9,7 +9,7 @@ The PXE environment utilizes a combination of DHCP, TFTP, and HTTP servers to pr
 - **DHCP Server**: `isc-dhcp-server`
   - Provides IP addresses to clients on the `192.168.1.0/24` subnet.
   - Detects client architecture (UEFI, Legacy BIOS, iPXE) to provide the appropriate boot file.
-- **TFTP Server**:
+- **TFTP Server**: `tftpd-hpa`
   - Serves the initial bootloaders.
   - `UEFI/grubx64.efi` for UEFI clients.
   - `Legacy/pxelinux.0` for Legacy BIOS clients.
@@ -22,6 +22,16 @@ The PXE environment utilizes a combination of DHCP, TFTP, and HTTP servers to pr
   - Ubuntu (20.04, 22.04, 23.10)
   - RHEL 9.0
   - AWS Ubuntu 22.04
+
+## Configuration Files Included
+
+- **DHCP**: `isc-dhcp-server`
+  - `dhcp/dhcpd.conf` (Original: `/etc/dhcp/dhcpd.conf`)
+- **Nginx**: `Nginx`
+  - `nginx/nginx.conf` (Original: `/etc/nginx/nginx.conf`)
+  - `nginx/default` (Original: `/etc/nginx/sites-available/default`)
+- **TFTP**: `tftpd-hpa`
+  - `tftp/tftpd-hpa` (Original: `/etc/default/tftpd-hpa`)
 
 ## Client Boot Flow
 
