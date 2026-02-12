@@ -1,0 +1,23 @@
+# The format of this file is documented in the dhcpd.leases(5) manual page.
+# This lease file was written by isc-dhcp-4.4.1
+
+lease 192.168.1.201 {
+  starts 4 2026/02/12 10:00:00 UTC;
+  ends 4 2026/02/12 11:00:00 UTC;
+  cltt 4 2026/02/12 09:59:00 UTC;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:11:22:33:44:55;
+  uid "\001\000\021"3DU\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000";
+  client-hostname "test-client-1";
+}
+lease 192.168.1.202 {
+  starts 4 2026/02/12 10:05:00 UTC;
+  ends 4 2026/02/12 11:05:00 UTC;
+  cltt 4 2026/02/12 10:04:00 UTC;
+  binding state active;
+  next binding state free;
+  hardware ethernet AA:BB:CC:DD:EE:FF;
+  uid "\001\000\021"3DU\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000";
+  client-hostname "test-client-2";
+}

@@ -1,0 +1,12 @@
+DEFAULT menu.c32
+PROMPT 0
+TIMEOUT 50
+MENU TITLE Legacy PXE Boot Menu
+
+LABEL ipxe
+  MENU LABEL Boot iPXE (auto -> DHCP points to /boot.ipxe)
+  KERNEL undionly.kpxe
+
+LABEL local
+  MENU LABEL Boot from local disk
+  LOCALBOOT 0

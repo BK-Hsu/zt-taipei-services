@@ -1,0 +1,93 @@
+set default=0
+set timeout=10
+
+# ===== SOL-friendly GRUB menu output =====
+#terminal_input console
+#terminal_output console
+set gfxpayload=text
+
+set menu_color_normal=white/black
+set menu_color_highlight=black/light-gray
+
+# ===== Common params =====
+# Ubuntu Live ISO (casper) common parameters
+set ubuntu_common="root=/dev/ram0 ramdisk_size=1500000 ip=dhcp boot=casper"
+
+# SOL console parameters (for Serial-over-LAN)
+set sol_console="console=tty0 console=ttyS0,115200n8 earlyprintk=ttyS0,115200 nomodeset systemd.log_target=console loglevel=7"
+
+
+# -------------------------
+# Ubuntu 20.04 Desktop (extracted kernel/initrd + ISO via HTTP)
+# -------------------------
+menuentry 'Ubuntu 20.04 IPv4 (VGA/Normal)' {
+    linux  (http,192.168.1.1)/ubuntu2004/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ---
+    initrd (http,192.168.1.1)/ubuntu2004/casper/initrd
+}
+menuentry 'Ubuntu 20.04 IPv4 (SOL)' {
+    linux  (http,192.168.1.1)/ubuntu2004/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ${sol_console} ---
+    initrd (http,192.168.1.1)/ubuntu2004/casper/initrd
+}
+
+menuentry 'Ubuntu 20.04 IPv6 (VGA/Normal)' {
+    linux  (http,[fd00:192:168:1::1])/ubuntu2004/casper/vmlinuz ${ubuntu_common} url=http://[fd00:192:168:1::1]/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ---
+    initrd (http,[fd00:192:168:1::1])/ubuntu2004/casper/initrd
+}
+menuentry 'Ubuntu 20.04 IPv6 (SOL)' {
+    linux  (http,[fd00:192:168:1::1])/ubuntu2004/casper/vmlinuz ${ubuntu_common} url=http://[fd00:192:168:1::1]/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ${sol_console} ---
+    initrd (http,[fd00:192:168:1::1])/ubuntu2004/casper/initrd
+}
+
+
+# -------------------------
+# Ubuntu 22.04 Desktop (extracted kernel/initrd + ISO via HTTP)
+# -------------------------
+menuentry 'Ubuntu 22.04 IPv4 (VGA/Normal)' {
+    linux  (http,192.168.1.1)/ubuntu2204/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2204/ubuntu-22.04.1-desktop-amd64.iso ---
+    initrd (http,192.168.1.1)/ubuntu2204/casper/initrd
+}
+menuentry 'Ubuntu 22.04 IPv4 (SOL)' {
+    linux  (http,192.168.1.1)/ubuntu2204/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2204/ubuntu-22.04.1-desktop-amd64.iso ${sol_console} ---
+    initrd (http,192.168.1.1)/ubuntu2204/casper/initrd
+}
+
+
+# -------------------------
+# Ubuntu 23.10 Desktop (extracted kernel/initrd + ISO via HTTP)
+# -------------------------
+menuentry 'Ubuntu 23.10 IPv4 (VGA/Normal)' {
+    linux  (http,192.168.1.1)/ubuntu2310/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2310/ubuntu-23.10.1-desktop-amd64.iso ---
+    initrd (http,192.168.1.1)/ubuntu2310/casper/initrd
+}
+menuentry 'Ubuntu 23.10 IPv4 (SOL)' {
+    linux  (http,192.168.1.1)/ubuntu2310/casper/vmlinuz ${ubuntu_common} url=http://192.168.1.1/ubuntu2310/ubuntu-23.10.1-desktop-amd64.iso ${sol_console} ---
+    initrd (http,192.168.1.1)/ubuntu2310/casper/initrd
+}
+
+
+# -------------------------
+# RHEL 9.0 (extracted pxeboot vmlinuz/initrd.img + HTTP repo)
+# -------------------------
+menuentry 'RHEL 9.0 IPv4 (VGA/Normal)' {
+    linux  (http,192.168.1.1)/rhel9/images/pxeboot/vmlinuz ip=dhcp inst.stage2=http://192.168.1.1/rhel9 inst.repo=http://192.168.1.1/rhel9 ---
+    initrd (http,192.168.1.1)/rhel9/images/pxeboot/initrd.img
+}
+menuentry 'RHEL 9.0 IPv4 (SOL)' {
+    linux  (http,192.168.1.1)/rhel9/images/pxeboot/vmlinuz ip=dhcp inst.stage2=http://192.168.1.1/rhel9 inst.repo=http://192.168.1.1/rhel9 inst.text ${sol_console} ---
+    initrd (http,192.168.1.1)/rhel9/images/pxeboot/initrd.img
+}
+
+
+# -------------------------
+# AWS Ubuntu 22.04 (extracted kernel/initrd under /aws-ubuntu2204/boot)
+# NOTE:
+# 你這個 tar.gz 不一定是 casper/ISO 流程能直接用；但你要求 vmlinuz/initrd 走解壓後路徑，這裡已完成。
+# -------------------------
+menuentry 'AWS Ubuntu 22.04 IPv4 (VGA/Normal)' {
+    linux  (http,192.168.1.1)/aws-ubuntu2204/boot/vmlinuz ip=dhcp ---
+    initrd (http,192.168.1.1)/aws-ubuntu2204/boot/initrd.img
+}
+menuentry 'AWS Ubuntu 22.04 IPv4 (SOL)' {
+    linux  (http,192.168.1.1)/aws-ubuntu2204/boot/vmlinuz ip=dhcp ${sol_console} ---
+    initrd (http,192.168.1.1)/aws-ubuntu2204/boot/initrd.img
+}

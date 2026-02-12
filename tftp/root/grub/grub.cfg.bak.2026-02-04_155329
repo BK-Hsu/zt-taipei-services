@@ -1,0 +1,85 @@
+set default=0
+set timeout=10
+
+# ===== SOL-friendly GRUB menu output =====
+#terminal_input console
+terminal_output console
+set gfxpayload=text
+
+set menu_color_normal=white/black
+set menu_color_highlight=black/light-gray
+
+# ===== Common params =====
+set common_root="root=/dev/ram0 ramdisk_size=1500000 ip=dhcp"
+set sol_console="console=tty0 console=ttyS0,115200n8 earlyprintk=ttyS0,115200 nomodeset systemd.log_target=console loglevel=7"
+
+# -------------------------
+# Ubuntu 20.04 Desktop ISO
+# -------------------------
+menuentry 'Ubuntu 20.04 IPv4 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ---
+    initrd /UEFI/initrd
+}
+menuentry 'Ubuntu 20.04 IPv4 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ${sol_console} ---
+    initrd /UEFI/initrd
+}
+
+menuentry 'Ubuntu 20.04 IPv6 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://[fd00:192:168:1::1]/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ---
+    initrd /UEFI/initrd
+}
+menuentry 'Ubuntu 20.04 IPv6 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://[fd00:192:168:1::1]/ubuntu2004/ubuntu-20.04.4-desktop-amd64.iso ${sol_console} ---
+    initrd /UEFI/initrd
+}
+
+# -------------------------
+# Ubuntu 22.04 Desktop ISO
+# -------------------------
+menuentry 'Ubuntu 22.04 IPv4 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2204/ubuntu-22.04.1-desktop-amd64.iso ---
+    initrd /UEFI/initrd
+}
+menuentry 'Ubuntu 22.04 IPv4 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2204/ubuntu-22.04.1-desktop-amd64.iso ${sol_console} ---
+    initrd /UEFI/initrd
+}
+
+# -------------------------
+# Ubuntu 23.10 Desktop ISO
+# -------------------------
+menuentry 'Ubuntu 23.10 IPv4 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2310/ubuntu-23.10.1-desktop-amd64.iso ---
+    initrd /UEFI/initrd
+}
+menuentry 'Ubuntu 23.10 IPv4 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/ubuntu2310/ubuntu-23.10.1-desktop-amd64.iso ${sol_console} ---
+    initrd /UEFI/initrd
+}
+
+# -------------------------
+# RHEL 9.0 Boot ISO
+# -------------------------
+menuentry 'RHEL 9.0 IPv4 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/rhel9/rhel-baseos-9.0-x86_64-boot.iso ---
+    initrd /UEFI/initrd
+}
+menuentry 'RHEL 9.0 IPv4 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/rhel9/rhel-baseos-9.0-x86_64-boot.iso ${sol_console} ---
+    initrd /UEFI/initrd
+}
+
+# -------------------------
+# AWS Ubuntu 22.04 (你原本是 tar.gz)
+# 注意：這條是否能用取決於你那個 tar.gz 內容是不是 netboot/rootfs 格式。
+# 我先保留你的原樣，並提供 VGA/SOL 兩個 entry。
+# -------------------------
+menuentry 'AWS Ubuntu 22.04 IPv4 (VGA/Normal)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/aws-ubuntu2204/ubuntu-22.04-server-5.15.0-52-generic-r144.tar.gz ---
+    initrd /UEFI/initrd
+}
+menuentry 'AWS Ubuntu 22.04 IPv4 (SOL)' {
+    linux /UEFI/vmlinuz ${common_root} url=http://192.168.1.1/aws-ubuntu2204/ubuntu-22.04-server-5.15.0-52-generic-r144.tar.gz ${sol_console} ---
+    initrd /UEFI/initrd
+}
