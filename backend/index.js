@@ -155,6 +155,88 @@ app.get('/api/dhcpv4-leases', (req, res) => {
   });
 });
 
+const path = require('path');
+const macNotesPath = path.join(__dirname, 'mac_notes.json');
+
+// Helper to read notes
+function readNotes() {
+  try {
+    if (fs.existsSync(macNotesPath)) {
+      const data = fs.readFileSync(macNotesPath, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Error reading notes:', err);
+  }
+  return {};
+}
+
+// Helper to write notes
+function writeNotes(notes) {
+  try {
+    fs.writeFileSync(macNotesPath, JSON.stringify(notes, null, 2));
+  } catch (err) {
+    console.error('Error writing notes:', err);
+  }
+}
+
+app.get('/api/mac-notes', (req, res) => {
+  res.json(readNotes());
+});
+
+app.post('/api/mac-notes', express.json(), (req, res) => {
+  const { mac, note } = req.body;
+  if (!mac) return res.status(400).json({ error: 'MAC address is required' });
+  
+  const notes = readNotes();
+  notes[mac.toUpperCase()] = note;
+  writeNotes(notes);
+  res.json({ success: true, notes });
+});
+
+app.get('/api/subnets', (req, res) => {
+  const networkInterfaces = os.networkInterfaces();
+  const subnets = [];
+
+  for (const interfaceName in networkInterfaces) {
+    const interfaces = networkInterfaces[interfaceName];
+    interfaces.forEach(iface => {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        subnets.push({
+          interface: interfaceName,
+          address: iface.address,
+          cidr: iface.cidr,
+          subnet: iface.cidr // Use CIDR as the target for nmap
+        });
+      }
+    });
+  }
+  res.json(subnets);
+});
+
+app.get('/api/arp-scan', (req, res) => {
+  const target = req.query.target;
+  let cmd = 'sudo python3 ../arp_scanner.py --json';
+  if (target) {
+    cmd += ` "${target}"`;
+  }
+  
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return res.status(500).json({ error: 'Failed to run ARP scan', details: error.message });
+    }
+    
+    try {
+      const devices = JSON.parse(stdout);
+      res.json(devices);
+    } catch (parseError) {
+      console.error(`parse error: ${parseError}`);
+      res.status(500).json({ error: 'Failed to parse ARP scan output', details: parseError.message, raw: stdout });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
