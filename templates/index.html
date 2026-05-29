@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHCP Active Leases</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            overflow-x: auto;
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .search-form input[type="text"] {
+            padding: 0.5rem;
+            width: 300px;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        .search-form button, .search-form .clear-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .search-form button {
+            background-color: #007bff;
+            color: white;
+        }
+        .search-form .clear-button {
+            background-color: #6c757d;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        thead th {
+            background-color: #343a40;
+            color: #ffffff;
+            border-top: 2px solid #212529;
+            border-bottom: 2px solid #212529;
+        }
+        tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>DHCP Active Leases</h1>
+        
+        <div class="search-container">
+            <form method="get" action="/" class="search-form">
+                <input type="text" name="search" placeholder="Search MAC, Hostname, IP..." value="{{ search_query or '' }}">
+                <button type="submit">Search</button>
+                {% if search_query %}
+                    <a href="/" class="clear-button">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>MAC Address</th>
+                    <th>Hostname</th>
+                    <th>IPv4 Address(es)</th>
+                    <th>IPv6 Address(es) (from NDP)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mac, data in clients.items() %}
+                <tr>
+                    <td>{{ mac }}</td>
+                    <td>{{ data.hostname | default('(unknown)') }}</td>
+                    <td>{{ data.ipv4_list | join(', ') if data.ipv4_list else 'N/A' }}</td>
+                    <td>{{ data.ipv6_list | join(', ') if data.ipv6_list else 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No active clients found for your query.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>Data refreshed on page load.</p>
+    </div>
+
+</body>
+</html>

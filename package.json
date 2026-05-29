@@ -1,0 +1,17 @@
+{
+  "name": "network-monitor-app",
+  "version": "1.0.0",
+  "description": "Web GUI to monitor network interface information",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently 'npm start --prefix backend' 'npm start --prefix frontend'",
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "BK-Hsu",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
